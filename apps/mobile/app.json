@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "MacroStake",
+    "slug": "macrostake",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "macrostake",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#09090b"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.macrostake.ios",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Used to scan food barcodes",
+        "NSMicrophoneUsageDescription": "Used for voice food logging"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#09090b"
+      },
+      "package": "app.macrostake.android",
+      "permissions": ["CAMERA"]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-camera"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

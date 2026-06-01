@@ -1,0 +1,452 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Auth ────────────────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+
+  profile       UserProfile?
+  macroGoals    MacroGoal[]
+  yearlyGoal    YearlyGoal?
+  foodLogs      FoodLog[]
+  dailySummaries DailySummary[]
+  penalties     Penalty[]
+  penaltyConfig PenaltyConfig?
+  paymentMethods PaymentMethod[]
+  wallets       CryptoWallet[]
+  transactions  Transaction[]
+  streaks       Streak[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── User Profile ─────────────────────────────────────────────────────────────
+
+model UserProfile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  weight         Float?   // kg
+  height         Float?   // cm
+  age            Int?
+  sex            Sex?
+  activityLevel  ActivityLevel @default(MODERATE)
+  timezone       String   @default("UTC")
+  currency       String   @default("USD")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Sex {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum ActivityLevel {
+  SEDENTARY
+  LIGHT
+  MODERATE
+  ACTIVE
+  VERY_ACTIVE
+}
+
+// ─── Macro Goals ──────────────────────────────────────────────────────────────
+
+model MacroGoal {
+  id          String   @id @default(cuid())
+  userId      String
+  calories    Int      // kcal
+  protein     Float    // g
+  carbs       Float    // g
+  fat         Float    // g
+  fiber       Float?   // g
+  sugar       Float?   // g
+  sodium      Float?   // mg
+  effectiveFrom DateTime @default(now())
+  effectiveTo   DateTime?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─── Yearly Goal ──────────────────────────────────────────────────────────────
+
+model YearlyGoal {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  year        Int
+  targetWeight Float?  // kg
+  description String?  @db.Text
+  targetCalories Int?
+  targetProtein  Float?
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─── Food Database ────────────────────────────────────────────────────────────
+
+model Food {
+  id           String   @id @default(cuid())
+  usdaFdcId    Int?     @unique  // USDA FoodData Central ID
+  name         String
+  brandOwner   String?
+  brandName    String?
+  category     String?
+  servingSize  Float    // grams
+  servingUnit  String   @default("g")
+
+  // Macros per 100g
+  calories     Float
+  protein      Float
+  carbs        Float
+  fat          Float
+  fiber        Float?
+  sugar        Float?
+  sodium       Float?
+  cholesterol  Float?
+  saturatedFat Float?
+  transFat     Float?
+  potassium    Float?
+  calcium      Float?
+  iron         Float?
+  vitaminC     Float?
+  vitaminD     Float?
+
+  isCustom     Boolean  @default(false)
+  createdById  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  foodLogs     FoodLog[]
+
+  @@index([name])
+  @@index([usdaFdcId])
+}
+
+// ─── Food Logging ─────────────────────────────────────────────────────────────
+
+model FoodLog {
+  id           String   @id @default(cuid())
+  userId       String
+  foodId       String
+  date         DateTime // date only (stored as start of day UTC)
+  meal         MealType
+  servings     Float    // number of servings
+  gramsConsumed Float   // actual grams eaten
+
+  // Cached macros at time of logging (in case food entry changes)
+  calories     Float
+  protein      Float
+  carbs        Float
+  fat          Float
+  fiber        Float?
+
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  food         Food     @relation(fields: [foodId], references: [id])
+
+  @@index([userId, date])
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+  PRE_WORKOUT
+  POST_WORKOUT
+}
+
+// ─── Daily Summary ────────────────────────────────────────────────────────────
+
+model DailySummary {
+  id             String   @id @default(cuid())
+  userId         String
+  date           DateTime // start of day UTC
+
+  // Totals
+  totalCalories  Float
+  totalProtein   Float
+  totalCarbs     Float
+  totalFat       Float
+  totalFiber     Float?
+
+  // Goals on that day
+  goalCalories   Int
+  goalProtein    Float
+  goalCarbs      Float
+  goalFat        Float
+
+  // Compliance (-1 = under, 0 = on track, 1 = over)
+  calorieStatus  ComplianceStatus
+  proteinStatus  ComplianceStatus
+  carbStatus     ComplianceStatus
+  fatStatus      ComplianceStatus
+
+  metGoal        Boolean  // true if all macros within tolerance
+  overageCalories Float   @default(0) // calories over goal
+  underProtein    Float   @default(0) // grams under protein goal
+
+  penaltyTriggered Boolean @default(false)
+  penaltyId        String?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  penalty        Penalty? @relation(fields: [penaltyId], references: [id])
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+enum ComplianceStatus {
+  UNDER
+  ON_TRACK
+  OVER
+}
+
+// ─── Penalty Config ───────────────────────────────────────────────────────────
+
+model PenaltyConfig {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+
+  // Penalty modes
+  mode                  PenaltyMode @default(DAILY_FLAT)
+
+  // DAILY_FLAT: fixed amount per day you miss goals
+  dailyFlatAmount       Float    @default(10.00)  // USD
+
+  // PER_OVERAGE: amount per N calories over
+  overageCalorieUnit    Int      @default(200)    // every X calories over
+  overageAmount         Float    @default(10.00)  // USD per unit
+
+  // Tolerance settings
+  calorieTolerancePct   Float    @default(5.0)    // % over/under that is "on track"
+  proteinToleranceG     Float    @default(5.0)    // grams under that is "on track"
+
+  // Earn-back settings
+  earnBackEnabled       Boolean  @default(true)
+  earnBackStreakDays    Int      @default(7)      // consecutive days to earn back
+  earnBackAmount        Float?                    // null = earn back last penalty
+  maxPendingPenalty     Float    @default(500.00) // cap on how much can be held
+
+  // Currency
+  currency              String   @default("USD")
+  cryptoEnabled         Boolean  @default(false)
+  cryptoToken           String?  // e.g. "ETH", "USDC"
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum PenaltyMode {
+  DAILY_FLAT       // flat fee per missed day
+  PER_OVERAGE      // per N calories over
+  HYBRID           // both: flat + per-overage
+}
+
+// ─── Penalties ────────────────────────────────────────────────────────────────
+
+model Penalty {
+  id            String        @id @default(cuid())
+  userId        String
+  amount        Float         // USD
+  reason        String        // human-readable
+  type          PenaltyType
+  status        PenaltyStatus @default(PENDING)
+
+  // Reference to what triggered it
+  triggerDate   DateTime?
+  caloriesOver  Float?
+  proteinUnder  Float?
+
+  // Payment tracking
+  stripeChargeId     String?
+  cryptoTxHash       String?
+  cryptoNetwork      String?
+  paidAt             DateTime?
+
+  // Earn-back tracking
+  earnedBackAt       DateTime?
+  earnedBackAmount   Float?
+  earnedBackStreakId String?
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dailySummaries DailySummary[]
+  streak        Streak?       @relation(fields: [earnedBackStreakId], references: [id])
+}
+
+enum PenaltyType {
+  DAILY_MISS      // missed daily goal
+  CALORIE_OVERAGE // went over calories
+  MANUAL          // manually added
+}
+
+enum PenaltyStatus {
+  PENDING         // charged but not yet resolved
+  CHARGED         // money taken
+  EARNED_BACK     // user completed streak, money returned
+  WAIVED          // admin waived
+  REFUNDED        // refunded via Stripe/crypto
+}
+
+// ─── Streaks ──────────────────────────────────────────────────────────────────
+
+model Streak {
+  id          String    @id @default(cuid())
+  userId      String
+  startDate   DateTime
+  endDate     DateTime?
+  currentDays Int       @default(0)
+  targetDays  Int       // days needed to earn back
+  completed   Boolean   @default(false)
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  penalties   Penalty[]
+}
+
+// ─── Payment Methods ──────────────────────────────────────────────────────────
+
+model PaymentMethod {
+  id                  String   @id @default(cuid())
+  userId              String
+  type                PaymentType
+  isDefault           Boolean  @default(false)
+
+  // Stripe
+  stripeCustomerId    String?
+  stripePaymentMethodId String?
+  cardLast4           String?
+  cardBrand           String?
+  cardExpMonth        Int?
+  cardExpYear         Int?
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CryptoWallet {
+  id          String   @id @default(cuid())
+  userId      String
+  address     String
+  network     String   // "ethereum", "polygon", "base"
+  token       String   // "ETH", "USDC", "USDT"
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, address, network])
+}
+
+enum PaymentType {
+  STRIPE_CARD
+  CRYPTO_WALLET
+}
+
+// ─── Transactions ─────────────────────────────────────────────────────────────
+
+model Transaction {
+  id              String          @id @default(cuid())
+  userId          String
+  type            TransactionType
+  amount          Float           // positive = charged, negative = refunded
+  currency        String          @default("USD")
+  description     String
+  status          TransactionStatus @default(PENDING)
+
+  stripeIntentId  String?
+  cryptoTxHash    String?
+
+  penaltyId       String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum TransactionType {
+  PENALTY_CHARGE
+  EARN_BACK_REFUND
+  STAKE_DEPOSIT
+  STAKE_WITHDRAWAL
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
