@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth";
 import { prisma } from "@macrostake/db";
-import { startOfDay, endOfDay, startOfYear, subDays } from "date-fns";
+import { startOfDay, endOfDay } from "date-fns";
 import { checkCompliance } from "@/lib/penalties";
-import { calculatePenalty } from "@/lib/penalties";
 
 export const dynamic = "force-dynamic";
 
