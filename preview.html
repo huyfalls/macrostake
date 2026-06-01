@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MacroStake Preview</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background: #09090b; color: white; font-family: system-ui, sans-serif; margin:0; }
+  .card { background: #18181b; border: 1px solid #27272a; border-radius: 16px; padding: 20px; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .tab-btn { padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; background: transparent; color: #71717a; font-size: 14px; }
+  .tab-btn.active { background: #27272a; color: white; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; font-size:14px; font-weight:500; margin-bottom:2px; color:#71717a; cursor:pointer; }
+  .nav-item.active { background:#27272a; color:white; }
+  .progress-bar { height: 8px; background: #27272a; border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 999px; }
+  .badge { border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- TOP TABS -->
+<div style="position:fixed;top:0;left:0;right:0;z-index:100;background:#09090b;border-bottom:1px solid #27272a;padding:10px 20px;display:flex;gap:6px;align-items:center;">
+  <div style="font-weight:900;font-size:17px;margin-right:12px;">Macro<span style="color:#ef4444">Stake</span></div>
+  <button class="tab-btn active" onclick="showPage('landing')">Landing Page</button>
+  <button class="tab-btn" onclick="showPage('dashboard')">Dashboard</button>
+  <button class="tab-btn" onclick="showPage('food')">Log Food</button>
+  <button class="tab-btn" onclick="showPage('penalties')">Penalties</button>
+</div>
+
+<div style="padding-top:56px;">
+
+<!-- ══════════════════════════════════════════════════════════════
+     LANDING PAGE
+══════════════════════════════════════════════════════════════ -->
+<div id="page-landing" class="page active">
+
+  <!-- Navbar -->
+  <nav style="border-bottom:1px solid #27272a;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-weight:900;font-size:20px;">Macro<span style="color:#ef4444">Stake</span></div>
+    <div style="display:flex;gap:28px;color:#a1a1aa;font-size:14px;cursor:pointer;">
+      <span>How It Works</span><span>Features</span><span>Pricing</span>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;">
+      <button style="background:transparent;color:#a1a1aa;border:none;cursor:pointer;font-size:14px;">Sign in</button>
+      <button style="background:#ef4444;color:white;padding:9px 20px;border-radius:12px;font-weight:700;border:none;cursor:pointer;font-size:14px;">Start staking</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section style="text-align:center;padding:80px 40px 60px;position:relative;overflow:hidden;">
+    <div style="position:absolute;left:50%;top:0;transform:translateX(-50%);width:700px;height:500px;background:rgba(239,68,68,0.07);border-radius:50%;filter:blur(80px);pointer-events:none;"></div>
+
+    <!-- Live ticker -->
+    <div style="display:inline-flex;align-items:center;gap:8px;border:1px solid #27272a;background:rgba(24,24,27,0.9);border-radius:999px;padding:6px 18px;font-size:13px;margin-bottom:32px;">
+      <span style="width:8px;height:8px;background:#ef4444;border-radius:50%;display:inline-block;"></span>
+      <span style="color:#a1a1aa;">Live —</span>
+      <span>Alex M. <span style="color:#f87171;font-weight:600;">lost $20</span> · 550 cal over</span>
+    </div>
+
+    <h1 style="font-size:68px;font-weight:900;line-height:1;margin:0 0 24px;letter-spacing:-2px;">
+      Put Your Money<br><span style="color:#ef4444;">Where Your Mouth Is.</span>
+    </h1>
+    <p style="color:#a1a1aa;font-size:19px;max-width:580px;margin:0 auto 40px;line-height:1.6;">
+      MacroStake charges you real money when you miss your macro goals. Hit your streak and earn it all back. Reach your yearly goal or face the consequences.
+    </p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:64px;">
+      <button style="background:#ef4444;color:white;padding:16px 40px;border-radius:14px;font-weight:700;border:none;cursor:pointer;font-size:16px;">Start staking for free</button>
+      <button style="background:#27272a;color:white;padding:16px 40px;border-radius:14px;font-weight:700;border:none;cursor:pointer;font-size:16px;">See how it works</button>
+    </div>
+
+    <!-- Stats row -->
+    <div style="display:flex;gap:56px;justify-content:center;flex-wrap:wrap;">
+      <div><div style="font-size:34px;font-weight:900;">300,000+</div><div style="color:#71717a;font-size:13px;margin-top:4px;">Foods in database</div></div>
+      <div><div style="font-size:34px;font-weight:900;">89%</div><div style="color:#71717a;font-size:13px;margin-top:4px;">Avg. compliance rate</div></div>
+      <div><div style="font-size:34px;font-weight:900;">$1.2M+</div><div style="color:#71717a;font-size:13px;margin-top:4px;">Total earned back</div></div>
+      <div><div style="font-size:34px;font-weight:900;">12,400</div><div style="color:#71717a;font-size:13px;margin-top:4px;">Active users</div></div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section style="border-top:1px solid #27272a;padding:72px 40px;">
+    <h2 style="text-align:center;font-size:48px;font-weight:900;margin-bottom:12px;">How It Works</h2>
+    <p style="text-align:center;color:#a1a1aa;margin-bottom:56px;font-size:17px;">Simple enough to start today. Painful enough to make you stick with it.</p>
+    <div style="display:flex;gap:16px;max-width:1100px;margin:0 auto;flex-wrap:wrap;justify-content:center;">
+      <div class="card" style="flex:1;min-width:180px;max-width:200px;"><div style="font-size:34px;font-weight:900;color:#ef4444;">01</div><h3 style="font-weight:700;margin:8px 0 6px;font-size:15px;">Set your macros & yearly goal</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;">Enter calorie, protein, carb, and fat targets. Set a year-end body goal.</p></div>
+      <div class="card" style="flex:1;min-width:180px;max-width:200px;"><div style="font-size:34px;font-weight:900;color:#f97316;">02</div><h3 style="font-weight:700;margin:8px 0 6px;font-size:15px;">Stake your money</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;">Link a credit card or crypto wallet. Choose your penalty amount.</p></div>
+      <div class="card" style="flex:1;min-width:180px;max-width:200px;"><div style="font-size:34px;font-weight:900;color:#eab308;">03</div><h3 style="font-weight:700;margin:8px 0 6px;font-size:15px;">Log every meal</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;">Search 300,000+ USDA foods. Track every gram in real time.</p></div>
+      <div class="card" style="flex:1;min-width:180px;max-width:200px;"><div style="font-size:34px;font-weight:900;color:#ef4444;">04</div><h3 style="font-weight:700;margin:8px 0 6px;font-size:15px;">Miss a goal, pay the price</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;">Day ends and you missed? Your card is charged automatically.</p></div>
+      <div class="card" style="flex:1;min-width:180px;max-width:200px;"><div style="font-size:34px;font-weight:900;color:#22c55e;">05</div><h3 style="font-weight:700;margin:8px 0 6px;font-size:15px;">Hit your streak, earn it back</h3><p style="color:#a1a1aa;font-size:13px;line-height:1.5;">7 or 14 consecutive days on track = full money refund.</p></div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section style="border-top:1px solid #27272a;padding:72px 40px;">
+    <h2 style="text-align:center;font-size:48px;font-weight:900;margin-bottom:12px;">Simple Pricing</h2>
+    <p style="text-align:center;color:#a1a1aa;margin-bottom:56px;font-size:17px;">The subscription is cheap. The penalties are what keep you honest.</p>
+    <div style="display:flex;gap:24px;max-width:920px;margin:0 auto;flex-wrap:wrap;justify-content:center;">
+      <div class="card" style="flex:1;min-width:250px;max-width:280px;display:flex;flex-direction:column;">
+        <h3 style="font-weight:900;font-size:20px;margin:0 0 4px;">Lightweight</h3>
+        <div style="font-size:42px;font-weight:900;margin:8px 0 4px;">$0<span style="font-size:16px;color:#71717a;font-weight:400;">/mo</span></div>
+        <p style="color:#a1a1aa;font-size:13px;margin-bottom:20px;flex:1;">Virtual penalties only, no real money charged.</p>
+        <button style="background:#27272a;color:white;padding:12px;border-radius:12px;font-weight:700;border:none;cursor:pointer;width:100%;">Start free</button>
+      </div>
+      <div style="flex:1;min-width:250px;max-width:280px;border-radius:16px;border:1px solid #ef4444;background:rgba(239,68,68,0.08);padding:20px;display:flex;flex-direction:column;">
+        <span style="background:#ef4444;color:white;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;text-transform:uppercase;width:fit-content;margin-bottom:12px;">Most Popular</span>
+        <h3 style="font-weight:900;font-size:20px;margin:0 0 4px;">Committed</h3>
+        <div style="font-size:42px;font-weight:900;margin:8px 0 4px;">$4.99<span style="font-size:16px;color:#71717a;font-weight:400;">/mo</span></div>
+        <p style="color:#a1a1aa;font-size:13px;margin-bottom:20px;flex:1;">Real money. Real consequences. Real results.</p>
+        <button style="background:#ef4444;color:white;padding:12px;border-radius:12px;font-weight:700;border:none;cursor:pointer;width:100%;">Start staking</button>
+      </div>
+      <div class="card" style="flex:1;min-width:250px;max-width:280px;display:flex;flex-direction:column;">
+        <h3 style="font-weight:900;font-size:20px;margin:0 0 4px;">Beast Mode</h3>
+        <div style="font-size:42px;font-weight:900;margin:8px 0 4px;">$12.99<span style="font-size:16px;color:#71717a;font-weight:400;">/mo</span></div>
+        <p style="color:#a1a1aa;font-size:13px;margin-bottom:20px;flex:1;">Group challenges, coach portal, API access.</p>
+        <button style="background:#27272a;color:white;padding:12px;border-radius:12px;font-weight:700;border:none;cursor:pointer;width:100%;">Go beast mode</button>
+      </div>
+    </div>
+  </section>
+
+</div><!-- end landing -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     DASHBOARD
+══════════════════════════════════════════════════════════════ -->
+<div id="page-dashboard" class="page">
+  <div style="display:flex;min-height:calc(100vh - 56px);">
+
+    <!-- Sidebar -->
+    <aside style="width:216px;flex-shrink:0;border-right:1px solid #27272a;display:flex;flex-direction:column;padding:16px;">
+      <div style="font-weight:900;font-size:16px;padding:8px 4px 16px;">Macro<span style="color:#ef4444">Stake</span></div>
+      <div class="nav-item active">📊 Today</div>
+      <div class="nav-item">🍽️ Log Food</div>
+      <div class="nav-item">🎯 Goals</div>
+      <div class="nav-item">💸 Penalties</div>
+      <div class="nav-item">📈 Progress</div>
+      <div class="nav-item">⚙️ Settings</div>
+      <div style="margin-top:auto;border-top:1px solid #27272a;padding-top:16px;display:flex;align-items:center;gap:10px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:rgba(239,68,68,0.2);display:flex;align-items:center;justify-content:center;font-weight:700;color:#f87171;font-size:13px;flex-shrink:0;">A</div>
+        <div><div style="font-size:13px;font-weight:600;">Alex M.</div><div style="font-size:11px;color:#71717a;">alex@example.com</div></div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main style="flex:1;padding:32px;overflow:auto;">
+      <h1 style="font-size:24px;font-weight:900;margin:0 0 4px;">Sunday, June 1</h1>
+      <p style="color:#71717a;font-size:14px;margin:0 0 24px;">Off track — every bite counts.</p>
+
+      <!-- Penalty alert -->
+      <div style="border:1px solid rgba(239,68,68,0.35);background:rgba(239,68,68,0.08);border-radius:16px;padding:20px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:start;gap:16px;">
+        <div>
+          <div style="color:#f87171;font-weight:700;font-size:15px;margin-bottom:8px;">⚠️ At risk of penalty tonight</div>
+          <p style="color:#a1a1aa;font-size:14px;margin:0 0 10px;">If you don't fix your macros before midnight, <strong style="color:#f87171;">$10.00</strong> will be charged.</p>
+          <div style="font-size:12px;color:#71717a;border-top:1px solid rgba(239,68,68,0.2);padding-top:10px;">550 cal over · $10.00 flat penalty</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:30px;font-weight:900;color:#f87171;">$10.00</div>
+          <div style="font-size:12px;color:#71717a;">at risk</div>
+        </div>
+      </div>
+
+      <!-- Macro section -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
+
+        <!-- Ring chart -->
+        <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
+          <div style="position:relative;width:190px;height:190px;">
+            <svg viewBox="0 0 190 190" width="190" height="190" style="transform:rotate(-90deg);">
+              <circle cx="95" cy="95" r="78" fill="none" stroke="#27272a" stroke-width="13"/>
+              <circle cx="95" cy="95" r="78" fill="none" stroke="#ef4444" stroke-width="13" stroke-dasharray="490" stroke-dashoffset="108" stroke-linecap="round"/>
+              <circle cx="95" cy="95" r="62" fill="none" stroke="#27272a" stroke-width="13"/>
+              <circle cx="95" cy="95" r="62" fill="none" stroke="#f97316" stroke-width="13" stroke-dasharray="390" stroke-dashoffset="136" stroke-linecap="round"/>
+              <circle cx="95" cy="95" r="46" fill="none" stroke="#27272a" stroke-width="13"/>
+              <circle cx="95" cy="95" r="46" fill="none" stroke="#eab308" stroke-width="13" stroke-dasharray="289" stroke-dashoffset="52" stroke-linecap="round"/>
+              <circle cx="95" cy="95" r="30" fill="none" stroke="#27272a" stroke-width="13"/>
+              <circle cx="95" cy="95" r="30" fill="none" stroke="#3b82f6" stroke-width="13" stroke-dasharray="188" stroke-dashoffset="17" stroke-linecap="round"/>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+              <div style="font-size:30px;color:#f87171;line-height:1;">✗</div>
+              <div style="font-size:11px;color:#71717a;margin-top:2px;">Off track</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;font-size:12px;color:#a1a1aa;">
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:4px;vertical-align:middle;"></span>Cal</span>
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f97316;margin-right:4px;vertical-align:middle;"></span>Protein</span>
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#eab308;margin-right:4px;vertical-align:middle;"></span>Carbs</span>
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3b82f6;margin-right:4px;vertical-align:middle;"></span>Fat</span>
+          </div>
+        </div>
+
+        <!-- Macro bars -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="card" style="grid-column:span 2;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:13px;color:#a1a1aa;">Calories</span>
+              <span style="font-size:12px;color:#f87171;font-weight:600;">+550 over</span>
+            </div>
+            <div><span style="font-size:30px;font-weight:900;">2,550</span><span style="color:#71717a;font-size:14px;"> / 2,000 kcal</span></div>
+            <div class="progress-bar" style="margin-top:12px;"><div class="progress-fill" style="width:100%;background:#ef4444;"></div></div>
+          </div>
+          <div class="card">
+            <div style="font-size:11px;color:#71717a;">Protein</div>
+            <div style="font-size:20px;font-weight:900;color:#f97316;margin:4px 0;">148g</div>
+            <div style="font-size:11px;color:#52525b;">/ 150g</div>
+            <div class="progress-bar" style="margin-top:8px;height:6px;"><div class="progress-fill" style="width:99%;background:#f97316;"></div></div>
+          </div>
+          <div class="card">
+            <div style="font-size:11px;color:#71717a;">Carbs</div>
+            <div style="font-size:20px;font-weight:900;color:#ef4444;margin:4px 0;">215g</div>
+            <div style="font-size:11px;color:#52525b;">/ 200g</div>
+            <div class="progress-bar" style="margin-top:8px;height:6px;"><div class="progress-fill" style="width:100%;background:#ef4444;"></div></div>
+          </div>
+          <div class="card">
+            <div style="font-size:11px;color:#71717a;">Fat</div>
+            <div style="font-size:20px;font-weight:900;color:#eab308;margin:4px 0;">58g</div>
+            <div style="font-size:11px;color:#52525b;">/ 65g</div>
+            <div class="progress-bar" style="margin-top:8px;height:6px;"><div class="progress-fill" style="width:89%;background:#eab308;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Streak + Penalties -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
+        <div class="card">
+          <h3 style="font-weight:700;margin:0 0 16px;display:flex;align-items:center;gap:8px;">🔥 Current Streak</h3>
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+            <div style="font-size:52px;font-weight:900;color:#f97316;line-height:1;">4</div>
+            <div>
+              <div style="font-size:14px;color:#a1a1aa;">days on track</div>
+              <div style="font-size:12px;color:#52525b;margin-top:2px;">3 more days to earn back</div>
+            </div>
+          </div>
+          <div class="progress-bar" style="height:12px;margin-bottom:10px;">
+            <div style="height:100%;width:57%;border-radius:999px;background:linear-gradient(to right,#f97316,#22c55e);"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#71717a;">
+            <span>Day 0</span><span style="color:#f97316;font-weight:700;">57%</span><span>Day 7</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-weight:700;margin:0 0 16px;display:flex;justify-content:space-between;align-items:center;">
+            Pending Penalties <span style="color:#f87171;font-weight:900;font-size:20px;">$30.00</span>
+          </h3>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid #27272a;"><span style="color:#a1a1aa;">Missed protein goal</span><span style="color:#f87171;font-weight:700;">$10.00</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid #27272a;"><span style="color:#a1a1aa;">550 cal over</span><span style="color:#f87171;font-weight:700;">$10.00</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;"><span style="color:#a1a1aa;">Missed daily goal</span><span style="color:#f87171;font-weight:700;">$10.00</span></div>
+        </div>
+      </div>
+
+      <!-- Yearly goal -->
+      <div class="card" style="margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px;">
+          <div>
+            <h3 style="font-weight:700;margin:0 0 6px;">🎯 Yearly Goal — 2026</h3>
+            <p style="color:#a1a1aa;font-size:13px;margin:0;">Get to 175 lbs, hit protein goal 350 days this year</p>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:26px;font-weight:900;">42%</div>
+            <div style="font-size:11px;color:#71717a;">of year elapsed</div>
+          </div>
+        </div>
+        <div class="progress-bar" style="height:12px;margin-bottom:14px;">
+          <div style="height:100%;width:42%;border-radius:999px;background:linear-gradient(to right,#ef4444,#f97316,#22c55e);"></div>
+        </div>
+        <div style="display:flex;gap:12px;">
+          <div style="background:#27272a;border-radius:12px;padding:10px 16px;"><div style="font-size:11px;color:#71717a;">Target weight</div><div style="font-weight:700;font-size:15px;">79.5 kg</div></div>
+          <div style="background:#27272a;border-radius:12px;padding:10px 16px;"><div style="font-size:11px;color:#71717a;">Daily calories</div><div style="font-weight:700;font-size:15px;">2,000 kcal</div></div>
+          <div style="background:#27272a;border-radius:12px;padding:10px 16px;"><div style="font-size:11px;color:#71717a;">Daily protein</div><div style="font-weight:700;font-size:15px;">150g</div></div>
+        </div>
+      </div>
+
+      <!-- Food log table -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h3 style="font-weight:700;margin:0;">Today's Log</h3>
+          <span style="color:#f87171;font-size:13px;cursor:pointer;">+ Add food</span>
+        </div>
+        <table style="width:100%;font-size:13px;border-collapse:collapse;">
+          <thead><tr style="color:#71717a;font-size:11px;border-bottom:1px solid #27272a;text-transform:uppercase;letter-spacing:0.5px;">
+            <th style="text-align:left;padding-bottom:10px;font-weight:600;">Food</th>
+            <th style="text-align:left;padding-bottom:10px;font-weight:600;">Meal</th>
+            <th style="text-align:right;padding-bottom:10px;font-weight:600;">Grams</th>
+            <th style="text-align:right;padding-bottom:10px;font-weight:600;">Cal</th>
+            <th style="text-align:right;padding-bottom:10px;font-weight:600;">Protein</th>
+            <th style="text-align:right;padding-bottom:10px;font-weight:600;">Carbs</th>
+            <th style="text-align:right;padding-bottom:10px;font-weight:600;">Fat</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(39,39,42,0.6);"><td style="padding:10px 8px 10px 0;font-weight:600;">Chicken Breast, cooked</td><td style="padding:10px 8px;color:#a1a1aa;">Lunch</td><td style="text-align:right;color:#a1a1aa;">200g</td><td style="text-align:right;font-weight:600;padding-left:8px;">330</td><td style="text-align:right;color:#f97316;padding-left:8px;">62g</td><td style="text-align:right;color:#eab308;padding-left:8px;">0g</td><td style="text-align:right;color:#3b82f6;padding-left:8px;">7.2g</td></tr>
+            <tr style="border-bottom:1px solid rgba(39,39,42,0.6);"><td style="padding:10px 8px 10px 0;font-weight:600;">Brown Rice, cooked</td><td style="padding:10px 8px;color:#a1a1aa;">Lunch</td><td style="text-align:right;color:#a1a1aa;">150g</td><td style="text-align:right;font-weight:600;padding-left:8px;">165</td><td style="text-align:right;color:#f97316;padding-left:8px;">3.5g</td><td style="text-align:right;color:#eab308;padding-left:8px;">34.5g</td><td style="text-align:right;color:#3b82f6;padding-left:8px;">1.3g</td></tr>
+            <tr style="border-bottom:1px solid rgba(39,39,42,0.6);"><td style="padding:10px 8px 10px 0;"><div style="font-weight:600;">Greek Yogurt</div><div style="font-size:11px;color:#71717a;">Fage</div></td><td style="padding:10px 8px;color:#a1a1aa;">Breakfast</td><td style="text-align:right;color:#a1a1aa;">200g</td><td style="text-align:right;font-weight:600;padding-left:8px;">146</td><td style="text-align:right;color:#f97316;padding-left:8px;">17.6g</td><td style="text-align:right;color:#eab308;padding-left:8px;">8g</td><td style="text-align:right;color:#3b82f6;padding-left:8px;">4.8g</td></tr>
+            <tr style="border-bottom:1px solid rgba(39,39,42,0.6);"><td style="padding:10px 8px 10px 0;font-weight:600;">Oats, rolled dry</td><td style="padding:10px 8px;color:#a1a1aa;">Breakfast</td><td style="text-align:right;color:#a1a1aa;">80g</td><td style="text-align:right;font-weight:600;padding-left:8px;">304</td><td style="text-align:right;color:#f97316;padding-left:8px;">11g</td><td style="text-align:right;color:#eab308;padding-left:8px;">54.6g</td><td style="text-align:right;color:#3b82f6;padding-left:8px;">5.2g</td></tr>
+            <tr style="border-bottom:1px solid rgba(39,39,42,0.6);"><td style="padding:10px 8px 10px 0;font-weight:600;">Pasta, cooked</td><td style="padding:10px 8px;color:#a1a1aa;">Dinner</td><td style="text-align:right;color:#a1a1aa;">200g</td><td style="text-align:right;font-weight:600;padding-left:8px;">264</td><td style="text-align:right;color:#f97316;padding-left:8px;">9.2g</td><td style="text-align:right;color:#eab308;padding-left:8px;">53g</td><td style="text-align:right;color:#3b82f6;padding-left:8px;">1.4g</td></tr>
+            <tr><td style="padding:10px 8px 10px 0;font-weight:600;">Ground Beef 80/20</td><td style="padding:10px 8px;color:#a1a1aa;">Dinner</td><td style="text-align:right;color:#a1a1aa;">150g</td><td style="text-align:right;font-weight:600;padding-left:8px;">375</td><td style="text-align:right;color:#f97316;padding-left:8px;">30g</td><td style="text-align:right;color:#eab308;padding-left:8px;">0g</td><td style="text-align:right;color:#3b82f6;padding-left:8px;">27g</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div><!-- end dashboard -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     LOG FOOD
+══════════════════════════════════════════════════════════════ -->
+<div id="page-food" class="page">
+  <div style="display:flex;min-height:calc(100vh - 56px);">
+    <aside style="width:216px;flex-shrink:0;border-right:1px solid #27272a;display:flex;flex-direction:column;padding:16px;">
+      <div style="font-weight:900;font-size:16px;padding:8px 4px 16px;">Macro<span style="color:#ef4444">Stake</span></div>
+      <div class="nav-item">📊 Today</div>
+      <div class="nav-item active">🍽️ Log Food</div>
+      <div class="nav-item">🎯 Goals</div>
+      <div class="nav-item">💸 Penalties</div>
+      <div class="nav-item">📈 Progress</div>
+      <div class="nav-item">⚙️ Settings</div>
+    </aside>
+    <main style="flex:1;padding:32px;">
+      <h1 style="font-size:24px;font-weight:900;margin:0 0 4px;">Log Food</h1>
+      <p style="color:#71717a;font-size:14px;margin:0 0 24px;">Search 300,000+ foods from the USDA database. Every gram counts.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+        <!-- Search panel -->
+        <div class="card">
+          <h2 style="font-weight:700;font-size:17px;margin:0 0 16px;">Search Foods</h2>
+          <input value="chicken breast" style="width:100%;background:#27272a;border:1px solid #3f3f46;border-radius:12px;padding:12px 16px;color:white;font-size:14px;box-sizing:border-box;margin-bottom:16px;outline:none;" />
+          <div style="display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto;">
+            <div style="border:1px solid #27272a;background:rgba(39,39,42,0.5);border-radius:12px;padding:12px;cursor:pointer;">
+              <div style="font-weight:600;font-size:13px;">Chicken Breast, boneless skinless, raw</div>
+              <div style="font-size:11px;color:#71717a;">USDA FoodData</div>
+              <div style="display:flex;gap:12px;margin-top:6px;font-size:12px;color:#a1a1aa;"><span>165 kcal</span><span style="color:#f97316;">31g protein</span><span>per 100g</span></div>
+            </div>
+            <div style="border:1px solid #ef4444;background:rgba(239,68,68,0.1);border-radius:12px;padding:12px;cursor:pointer;">
+              <div style="font-weight:600;font-size:13px;">Chicken Breast, cooked, roasted</div>
+              <div style="font-size:11px;color:#71717a;">USDA FoodData</div>
+              <div style="display:flex;gap:12px;margin-top:6px;font-size:12px;color:#a1a1aa;"><span>195 kcal</span><span style="color:#f97316;">36g protein</span><span>per 100g</span></div>
+            </div>
+            <div style="border:1px solid #27272a;background:rgba(39,39,42,0.5);border-radius:12px;padding:12px;cursor:pointer;">
+              <div style="font-weight:600;font-size:13px;">Chicken Breast, grilled</div>
+              <div style="font-size:11px;color:#71717a;">Trader Joe's</div>
+              <div style="display:flex;gap:12px;margin-top:6px;font-size:12px;color:#a1a1aa;"><span>110 kcal</span><span style="color:#f97316;">23g protein</span><span>per 100g</span></div>
+            </div>
+            <div style="border:1px solid #27272a;background:rgba(39,39,42,0.5);border-radius:12px;padding:12px;cursor:pointer;">
+              <div style="font-weight:600;font-size:13px;">Chicken Breast Strips</div>
+              <div style="font-size:11px;color:#71717a;">Tyson Foods</div>
+              <div style="display:flex;gap:12px;margin-top:6px;font-size:12px;color:#a1a1aa;"><span>130 kcal</span><span style="color:#f97316;">25g protein</span><span>per 100g</span></div>
+            </div>
+            <div style="border:1px solid #27272a;background:rgba(39,39,42,0.5);border-radius:12px;padding:12px;cursor:pointer;">
+              <div style="font-weight:600;font-size:13px;">Chicken Breast, canned in water</div>
+              <div style="font-size:11px;color:#71717a;">Swanson</div>
+              <div style="display:flex;gap:12px;margin-top:6px;font-size:12px;color:#a1a1aa;"><span>90 kcal</span><span style="color:#f97316;">17g protein</span><span>per 100g</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Log panel -->
+        <div class="card">
+          <h2 style="font-weight:700;font-size:17px;margin:0 0 16px;">Log Selected Food</h2>
+          <div style="background:#27272a;border-radius:12px;padding:14px;margin-bottom:16px;">
+            <div style="font-weight:600;font-size:14px;">Chicken Breast, cooked, roasted</div>
+            <div style="font-size:12px;color:#71717a;margin-top:2px;">USDA FoodData</div>
+          </div>
+          <div style="margin-bottom:16px;">
+            <label style="display:block;font-size:13px;color:#a1a1aa;font-weight:600;margin-bottom:8px;">Meal</label>
+            <select style="width:100%;background:#27272a;border:1px solid #3f3f46;border-radius:12px;padding:12px 16px;color:white;font-size:14px;outline:none;">
+              <option>Lunch</option><option>Breakfast</option><option>Dinner</option><option>Snack</option><option>Pre-Workout</option><option>Post-Workout</option>
+            </select>
+          </div>
+          <div style="margin-bottom:16px;">
+            <label style="display:block;font-size:13px;color:#a1a1aa;font-weight:600;margin-bottom:8px;">Amount (grams)</label>
+            <input value="200" style="width:100%;background:#27272a;border:1px solid #3f3f46;border-radius:12px;padding:12px 16px;color:white;font-size:20px;font-weight:700;box-sizing:border-box;outline:none;" />
+          </div>
+          <!-- Macro preview -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px;">
+            <div style="background:#27272a;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:900;color:#ef4444;">390</div><div style="font-size:11px;color:#71717a;margin-top:2px;">Calories</div></div>
+            <div style="background:#27272a;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:900;color:#f97316;">72g</div><div style="font-size:11px;color:#71717a;margin-top:2px;">Protein</div></div>
+            <div style="background:#27272a;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:900;color:#eab308;">0g</div><div style="font-size:11px;color:#71717a;margin-top:2px;">Carbs</div></div>
+            <div style="background:#27272a;border-radius:12px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:900;color:#3b82f6;">8.4g</div><div style="font-size:11px;color:#71717a;margin-top:2px;">Fat</div></div>
+          </div>
+          <button style="background:#ef4444;color:white;padding:16px;border-radius:14px;font-weight:900;border:none;cursor:pointer;width:100%;font-size:15px;">Log Food</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div><!-- end food -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     PENALTIES
+══════════════════════════════════════════════════════════════ -->
+<div id="page-penalties" class="page">
+  <div style="display:flex;min-height:calc(100vh - 56px);">
+    <aside style="width:216px;flex-shrink:0;border-right:1px solid #27272a;display:flex;flex-direction:column;padding:16px;">
+      <div style="font-weight:900;font-size:16px;padding:8px 4px 16px;">Macro<span style="color:#ef4444">Stake</span></div>
+      <div class="nav-item">📊 Today</div>
+      <div class="nav-item">🍽️ Log Food</div>
+      <div class="nav-item">🎯 Goals</div>
+      <div class="nav-item active">💸 Penalties</div>
+      <div class="nav-item">📈 Progress</div>
+      <div class="nav-item">⚙️ Settings</div>
+    </aside>
+    <main style="flex:1;padding:32px;">
+      <h1 style="font-size:24px;font-weight:900;margin:0 0 4px;">Penalty History</h1>
+      <p style="color:#71717a;font-size:14px;margin:0 0 24px;">Every time your macros cost you money.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;">
+        <div class="card"><div style="font-size:26px;font-weight:900;color:#f87171;">$80.00</div><div style="font-size:12px;color:#71717a;margin-top:4px;">Total charged</div></div>
+        <div class="card"><div style="font-size:26px;font-weight:900;color:#4ade80;">$40.00</div><div style="font-size:12px;color:#71717a;margin-top:4px;">Earned back</div></div>
+        <div class="card"><div style="font-size:26px;font-weight:900;color:#fbbf24;">$30.00</div><div style="font-size:12px;color:#71717a;margin-top:4px;">Pending</div></div>
+        <div class="card"><div style="font-size:26px;font-weight:900;color:white;">$40.00</div><div style="font-size:12px;color:#71717a;margin-top:4px;">Net cost</div></div>
+      </div>
+
+      <div class="card">
+        <table style="width:100%;font-size:13px;border-collapse:collapse;">
+          <thead><tr style="color:#71717a;font-size:11px;border-bottom:1px solid #27272a;text-transform:uppercase;letter-spacing:0.5px;">
+            <th style="text-align:left;padding-bottom:12px;font-weight:600;">Date</th>
+            <th style="text-align:left;padding-bottom:12px;font-weight:600;">Reason</th>
+            <th style="text-align:left;padding-bottom:12px;font-weight:600;">Type</th>
+            <th style="text-align:right;padding-bottom:12px;font-weight:600;">Amount</th>
+            <th style="text-align:right;padding-bottom:12px;font-weight:600;">Status</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(39,39,42,0.6);"><td style="padding:12px 8px 12px 0;color:#a1a1aa;">Jun 1</td><td style="padding:12px 8px;">550 cal over goal</td><td style="padding:12px 8px;color:#71717a;font-size:11px;">DAILY MISS</td><td style="text-align:right;color:#f87171;font-weight:700;padding-left:8px;">$10.00</td><td style="text-align:right;padding-left:8px;"><span class="badge" style="background:rgba(120,53,15,0.5);color:#fbbf24;">PENDING</span></td></tr>
+            <tr style="border-bottom:1px solid rgba(39,39,42,0.6);"><td style="padding:12px 8px 12px 0;color:#a1a1aa;">May 31</td><td style="padding:12px 8px;">Missed protein goal</td><td style="padding:12px 8px;color:#71717a;font-size:11px;">DAILY MISS</td><td style="text-align:right;color:#f87171;font-weight:700;padding-left:8px;">$10.00</td><td style="text-align:right;padding-left:8px;"><span class="badge" style="background:rgba(127,29,29,0.5);color:#f87171;">CHARGED</span></td></tr>
+            <tr style="border-bottom:1px solid rgba(39,39,42,0.6);"><td style="padding:12px 8px 12px 0;color:#a1a1aa;">May 30</td><td style="padding:12px 8px;">Missed daily goal</td><td style="padding:12px 8px;color:#71717a;font-size:11px;">DAILY MISS</td><td style="text-align:right;color:#f87171;font-weight:700;padding-left:8px;">$10.00</td><td style="text-align:right;padding-left:8px;"><span class="badge" style="background:rgba(127,29,29,0.5);color:#f87171;">CHARGED</span></td></tr>
+            <tr style="border-bottom:1px solid rgba(39,39,42,0.6);"><td style="padding:12px 8px 12px 0;color:#a1a1aa;">May 29</td><td style="padding:12px 8px;">350 cal over goal</td><td style="padding:12px 8px;color:#71717a;font-size:11px;">CALORIE OVERAGE</td><td style="text-align:right;color:#f87171;font-weight:700;padding-left:8px;">$10.00</td><td style="text-align:right;padding-left:8px;"><span class="badge" style="background:rgba(20,83,45,0.5);color:#4ade80;">EARNED BACK</span></td></tr>
+            <tr style="border-bottom:1px solid rgba(39,39,42,0.6);"><td style="padding:12px 8px 12px 0;color:#a1a1aa;">May 22</td><td style="padding:12px 8px;">Missed protein goal</td><td style="padding:12px 8px;color:#71717a;font-size:11px;">DAILY MISS</td><td style="text-align:right;color:#f87171;font-weight:700;padding-left:8px;">$10.00</td><td style="text-align:right;padding-left:8px;"><span class="badge" style="background:rgba(20,83,45,0.5);color:#4ade80;">EARNED BACK</span></td></tr>
+            <tr style="border-bottom:1px solid rgba(39,39,42,0.6);"><td style="padding:12px 8px 12px 0;color:#a1a1aa;">May 21</td><td style="padding:12px 8px;">500 cal over goal</td><td style="padding:12px 8px;color:#71717a;font-size:11px;">CALORIE OVERAGE</td><td style="text-align:right;color:#f87171;font-weight:700;padding-left:8px;">$20.00</td><td style="text-align:right;padding-left:8px;"><span class="badge" style="background:rgba(20,83,45,0.5);color:#4ade80;">EARNED BACK</span></td></tr>
+            <tr><td style="padding:12px 8px 12px 0;color:#a1a1aa;">May 15</td><td style="padding:12px 8px;">Missed daily goal</td><td style="padding:12px 8px;color:#71717a;font-size:11px;">DAILY MISS</td><td style="text-align:right;color:#f87171;font-weight:700;padding-left:8px;">$10.00</td><td style="text-align:right;padding-left:8px;"><span class="badge" style="background:rgba(127,29,29,0.5);color:#f87171;">CHARGED</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+</div><!-- end penalties -->
+
+</div><!-- end padding-top -->
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['landing','dashboard','food','penalties'][i] === id);
+  });
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
