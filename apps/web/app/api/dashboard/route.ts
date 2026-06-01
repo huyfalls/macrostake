@@ -31,7 +31,12 @@ export async function GET(req: NextRequest) {
   ]);
 
   const totals = foodLogs.reduce(
-    (a, l) => ({ calories: a.calories + l.calories, protein: a.protein + l.protein, carbs: a.carbs + l.carbs, fat: a.fat + l.fat }),
+    (a: { calories: number; protein: number; carbs: number; fat: number }, l) => ({
+      calories: a.calories + l.calories,
+      protein:  a.protein  + l.protein,
+      carbs:    a.carbs    + l.carbs,
+      fat:      a.fat      + l.fat,
+    }),
     { calories: 0, protein: 0, carbs: 0, fat: 0 }
   );
 
